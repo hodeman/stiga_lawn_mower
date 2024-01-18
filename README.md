@@ -1,2 +1,1 @@
-# stiga_lawn_mower
-Testing API for Stiga Autonomous Robotic Lawn Mowers
+Testing API, stage 1

@@ -1,0 +1,6 @@
+send_start_command:
+  description: Send start command to Stiga Lawn Mower
+  fields:
+    uuid:
+      description: UUID of the device
+      example: "05faaa66-e969-4374-89dd-e3858e0dd7c7"
