@@ -5,7 +5,7 @@
   "dependencies": [],
   "codeowners": [],
   "requirements": [],
-  "config_flow": false,
+  "config_flow": true,
   "translations": [],
   "quality_scale": "beta",
   "version": "0.1",
