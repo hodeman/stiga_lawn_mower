@@ -2,31 +2,13 @@
   "domain": "stiga_lawn_mower",
   "name": "Stiga Lawn Mower",
   "documentation": "https://github.com/hodeman/stiga_lawn_mower",
-  "version": "0.1.0",
-  "requirements": [],
   "dependencies": [],
-  "codeowners": ["@hodeman"],
-  "config_flow": true,
-  "translations": ["en"],
-  "country": ["US"],
-  "logo": "logo.png",
+  "codeowners": [],
+  "requirements": [],
+  "config_flow": false,
+  "translations": [],
+  "quality_scale": "beta",
+  "version": "0.1",
   "issue_tracker": "https://github.com/hodeman/stiga_lawn_mower/issues",
-  "quality_scale": "gold",
-  "start": "async_setup",
-  "after_dependencies": ["sensor"],
-  "iot_class": "LocalPush",
-  "config": {
-    "entries": [
-      {
-        "source": "user",
-        "name": "Stiga Lawn Mower Integration",
-        "platform": "stiga_lawn_mower"
-      }
-    ],
-    "component": "sensor",
-    "device_classes": ["battery"],
-    "icon": "mdi:robot-mower",
-    "unit_system": ["length", "m"],
-    "legacy_entity_picture": true
-  }
+  "pypi": ""
 }
