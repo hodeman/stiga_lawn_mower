@@ -1,43 +1,33 @@
-"""
-Stiga Lawn Mower integration for Home Assistant
-"""
-import logging
-
+# __init__.py
+import asyncio
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
+from .const import DOMAIN, CONF_EMAIL
+from .config_flow import StigaLawnMowerConfigFlow
 
-# The domain of your component. Should be equal to the name of your component.
-DOMAIN = "stiga_lawn_mower"
-
-# List of platforms to support. There should be a matching .py file for each platform in the same folder.
-PLATFORMS = ["sensor"]
-
-_LOGGER = logging.getLogger(__name__)
-
-# This is the list of all of the platforms that Stiga Lawn Mower integrates with.  In your case, it's just 'sensor'.
-async def async_setup(hass: HomeAssistant, config: dict):
+async def async_setup(hass, config):
     """Set up the Stiga Lawn Mower component."""
-    # No configuration is needed. Return True to indicate successful setup.
-    return True
-
-# This is an example of async_setup_entry that is called when the configuration entry is setup during integration setup.
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
-    """Set up Stiga Lawn Mower from a config entry."""
     hass.data.setdefault(DOMAIN, {})
-    hass.data[DOMAIN][entry.entry_id] = entry.data
+    return True
 
-    # Call the setup function for each platform (in your case, just 'sensor').
-    for platform in PLATFORMS:
-        hass.async_create_task(
-            hass.config_entries.async_forward_entry_setup(entry, platform)
-        )
+async def async_setup_entry(hass, entry):
+    """Set up Stiga Lawn Mower from a config entry."""
+    if "firebase_api_key" in entry.data:
+        hass.data[DOMAIN].setdefault("firebase_api_key", entry.data["firebase_api_key"])
+        hass.data[DOMAIN].setdefault("clients", {})
+
+    # Load platforms
+    hass.async_create_task(
+        hass.config_entries.async_forward_entry_setup(entry, "sensor")
+    )
 
     return True
 
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
+async def async_unload_entry(hass, entry):
     """Unload a config entry."""
-    # Call the unload function for each platform (in your case, just 'sensor').
-    for platform in PLATFORMS:
-        await hass.config_entries.async_forward_entry_unload(entry, platform)
+    # Unload platforms
+    await hass.config_entries.async_forward_entry_unload(entry, "sensor")
+
+    # Remove Firebase API key from options on unload
+    hass.data[DOMAIN].pop("firebase_api_key", None)
 
     return True
