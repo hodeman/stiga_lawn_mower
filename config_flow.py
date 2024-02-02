@@ -1,21 +1,20 @@
 # config_flow.py
 import voluptuous as vol
-from homeassistant import config_entries
-from .const import DOMAIN, CONF_EMAIL, CONF_PASSWORD, CLIENTS_KEY, FIREBASE_API_KEY
+from homeassistant import config_entries  # Add this line
+from .const import DOMAIN, CONF_EMAIL, CONF_PASSWORD, CLIENTS_KEY, FIREBASE_API_KEY, FIREBASE_TOKEN_KEY
 from .stiga_api import StigaApiClient
 import logging
 
 _LOGGER = logging.getLogger(__name__)
-
-data_schema = vol.Schema(
-    {
-        vol.Required(CONF_EMAIL): str,
-        vol.Required(CONF_PASSWORD): str,
-    }
-)
-
 class StigaLawnMowerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def async_step_user(self, user_input=None):
+        data_schema = vol.Schema(
+            {
+                vol.Required(CONF_EMAIL): str,
+                vol.Required(CONF_PASSWORD): str,
+            }
+        )
+
         if user_input is None:
             return self.async_show_form(
                 step_id="user",
@@ -35,10 +34,8 @@ class StigaLawnMowerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         api_client = StigaApiClient(FIREBASE_API_KEY)  # Use your Firebase API Key from const.py
 
         try:
-            firebase_token = await api_client.get_firebase_token(email, password)
+            firebase_token = await api_client.authenticate(email, password)
             devices = await api_client.get_devices()
-
-            _LOGGER.debug(f"Devices linked to the account: {devices}")
 
             # Check if the key exists in self.hass.data[DOMAIN]
             if DOMAIN not in self.hass.data:
